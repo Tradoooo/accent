@@ -194,6 +194,27 @@ async function main() {
   console.log(`badge accueil : ${badgeAccueil ? 'ok' : 'ECHEC'}`);
   console.log(`souligné SVG : ${JSON.stringify(souligne)}`);
 
+  // Audit Miroir : scène, verre, motifs, pointillé, chevauchement panneau/scène.
+  const miroir = await evaluer(`(() => {
+    const scene = document.querySelector('.scene-miroir');
+    const panel = document.querySelector('.panneau-verre');
+    const verre = panel ? getComputedStyle(panel) : null;
+    let chevauchement = null;
+    if (scene && panel) {
+      chevauchement = Math.round(scene.getBoundingClientRect().bottom - panel.getBoundingClientRect().top);
+    }
+    return {
+      variante: document.body.className.includes('fond-miroir') || Boolean(scene),
+      scene: Boolean(scene),
+      pattern: Boolean(document.querySelector('pattern[id^="pt-"]')),
+      pointille: Boolean(document.querySelector('.cible-pointille')),
+      verre: verre ? verre.backdropFilter : '',
+      chevauchementPx: chevauchement,
+    };
+  })()`);
+  console.log(`miroir : ${JSON.stringify(miroir)}`);
+  await audit('accueil-miroir');
+
   // 3. Parcours → Diagnostic
   await viewport(1440, 900);
   await attente(400);
@@ -224,9 +245,16 @@ async function main() {
       return { h: Math.round(r.height), cible: c.className.includes('paire-cell-cible') };
     }) : [];
     const fourchette = Boolean(document.querySelector('[aria-label^="Score"]'));
+    const grilleParams = Boolean(document.querySelector('[aria-label^="Paramètres articulatoires"]'));
+    const scene = document.querySelector('.scene-miroir');
     const encart = Boolean(document.querySelector('figure.encart svg[role="img"]'));
     const simulation = (document.body.innerText.match(/simul/gi) || []).length;
-    return { heros: heros.length, chiffre, badge, cellules, fourchette, encart, simulation };
+    let miroirChevauch = null;
+    const panel = document.querySelector('.panneau-verre');
+    if (scene && panel) {
+      miroirChevauch = Math.round(scene.getBoundingClientRect().bottom - panel.getBoundingClientRect().top);
+    }
+    return { heros: heros.length, chiffre, badge, cellules, fourchette, encart, simulation, miroir: { scene: Boolean(scene), grilleParams, chevauchementPx: miroirChevauch } };
   })()`);
   console.log(`diagnostic : ${JSON.stringify(diag)}`);
 

@@ -27,6 +27,8 @@
   --erreur: #e5484d;
   --r-carte: 22px;
   --r-ctrl: 14px;
+  --verre: rgba(20, 27, 35, 0.74);
+  --verre-bord: rgba(255, 255, 255, 0.08);
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --spring: cubic-bezier(0.34, 1.5, 0.5, 1);
 }
@@ -55,6 +57,101 @@ body {
   background-size: auto, auto, 36px 36px, 36px 36px;
   background-repeat: no-repeat, no-repeat, repeat, repeat;
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 42%, rgba(0, 0, 0, 0.55) 72%, rgba(0, 0, 0, 0.25) 100%);
+}
+
+/* Couche Miroir (variante B) : fond studio dégradé, sans grille. */
+.fond-miroir {
+  background-image: linear-gradient(180deg, #121a23 0%, #0d131a 46%, var(--nuit) 100%);
+}
+
+/* Scène : coupe en points, pleine largeur (marges négatives du conteneur). */
+.scene-miroir {
+  @apply relative -mx-4 px-4;
+}
+
+/* Panneau de verre : il remonte sur la scène (30-56 px). */
+.panneau-verre {
+  background: var(--verre);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--verre-bord);
+  border-radius: 22px;
+}
+
+/* Repères : petites étiquettes mono sur fond nuit. */
+.repere {
+  @apply inline-flex items-center rounded-[10px] border border-nuit-bord2 bg-nuit px-2 py-1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10.5px;
+  line-height: 14px;
+  color: var(--neutre);
+}
+
+.repere-cible {
+  color: var(--amb);
+  border-color: rgba(242, 163, 60, 0.45);
+}
+
+/* Pointillé ambre : la position cible de la langue, en boucle. */
+.cible-pointille {
+  stroke-dasharray: 5 5;
+  animation: pointille-coule 1.6s linear infinite;
+}
+
+@keyframes pointille-coule {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+/* Souffle : cinq points ambre qui sortent des dents. */
+.souffle-point {
+  animation: souffle-sors 1.8s ease-in-out infinite;
+}
+
+@keyframes souffle-sors {
+  0% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(64px);
+  }
+}
+
+/* Respiration de l'accueil. */
+.respiration {
+  animation: respirer 4s ease-in-out infinite;
+}
+
+@keyframes respirer {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Titre Miroir : 34 px, graisse 300, interlettrage serré. */
+.titre-miroir {
+  font-size: 34px;
+  font-weight: 300;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+@media (max-width: 639px) {
+  .titre-miroir {
+    font-size: 31px;
+  }
 }
 
 /* Souligné SVG du titre : dessiné à l'entrée (dashoffset), état final = tracé

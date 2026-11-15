@@ -38,3 +38,10 @@ export const RMS_SILENCE = 0.004;
 
 /** Nombre de phrases d'entraînement générées pour la cible (RF-08). */
 export const PHRASES_ENTRAINEMENT = 3;
+
+/**
+ * Couche du verrou design V1 (Design/accent/HANDOFF.md [Claude] 2026-11-15) :
+ * « socle » = variante A « Veille » seule ; « miroir » = couche B par-dessus
+ * (coupe en points, panneau de verre), Accueil et Diagnostic uniquement.
+ */
+export const COUCHE_DESIGN: 'socle' | 'miroir' = 'miroir';

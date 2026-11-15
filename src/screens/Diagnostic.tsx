@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { Cible, Mesure } from '../types';
 import type { ResultatPipeline } from '../engine/pipeline';
 import { expliquer, pairePour } from '../engine/explain';
+import { COUCHE_DESIGN } from '../constants';
 import Entete from '../components/Entete';
 import PhraseColoree from '../components/PhraseColoree';
 import PaireMinimale from '../components/PaireMinimale';
@@ -11,6 +12,8 @@ import FourchetteScore from '../components/FourchetteScore';
 import ModeleAudio from '../components/ModeleAudio';
 import Preuve from '../components/Preuve';
 import SchemaArticulatoire from '../components/SchemaArticulatoire';
+import ParametresArticulatoires from '../components/ParametresArticulatoires';
+import { articulationPour } from '../data/articulation';
 
 /**
  * Écran 4 — Diagnostic : le plan clé de la vidéo (ACCENT.md §6, 1:05-1:30).
@@ -69,14 +72,29 @@ function enLettres(n: number): string {
   return ['zéro', 'un', 'deux', 'trois'][n] ?? String(n);
 }
 
+/** Repère court du lieu cible : dérivé du paramètre `lieu`, jamais inventé. */
+const REPERES_LIEU: Record<string, string> = {
+  levres: 'aux lèvres',
+  dents: 'entre les dents',
+  alveoles: 'aux alvéoles',
+  palais: 'au palais',
+  voile: 'au voile',
+  glotte: 'dans la gorge',
+};
+
 function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | null }) {
   const exp = expliquer(cible);
   const paire = pairePour(cible);
-  return (
-    <div className="carte flex flex-col items-center gap-5 text-center">
+  const miroir = COUCHE_DESIGN === 'miroir';
+
+  const contenu = (
+    <>
       <p className="etiquette">Le son à travailler — un seul</p>
 
-      <p className="phoneme-heros" aria-label={`phonème cible ${cible.entree.ipa}`}>
+      <p
+        className={miroir ? 'phoneme-heros text-[clamp(56px,18vw,76px)]' : 'phoneme-heros'}
+        aria-label={`phonème cible ${cible.entree.ipa}`}
+      >
         /{cible.entree.ipa}/
       </p>
 
@@ -113,7 +131,11 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
 
       <ModeleAudio texte={cible.mot} langue={cible.entree.langueCible} label="Écouter le mot" />
 
-      {!exp.positionnel && <SchemaArticulatoire code={cible.code} />}
+      {!exp.positionnel && !miroir && (
+        <SchemaArticulatoire code={cible.code} variante="trait" hauteur={150} />
+      )}
+
+      {miroir && !exp.positionnel && <ParametresArticulatoires code={cible.code} />}
 
       <p className="max-w-prose text-base text-neutre">{cible.entree.conseil}</p>
       <p className="text-[12.5px] text-neutre" aria-hidden="true">
@@ -121,7 +143,30 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
         {'☆'.repeat(3 - cible.entree.difficulte)} · {enLettres(cible.occurrences)} occurrence
         {cible.occurrences > 1 ? 's' : ''} dans ta phrase
       </p>
-    </div>
+    </>
+  );
+
+  if (!miroir) {
+    return <div className="carte flex flex-col items-center gap-5 text-center">{contenu}</div>;
+  }
+
+  return (
+    <>
+      {/* Scène Miroir : la coupe en points remonte au-dessus du panneau. */}
+      {!exp.positionnel && (
+        <section className="scene-miroir">
+          <SchemaArticulatoire code={cible.code} variante="points" hauteur={270} souffleAnime />
+          <div className="mt-1 flex justify-center gap-2">
+            <span className="repere repere-cible">
+              cible · {REPERES_LIEU[articulationPour(cible.code)?.lieu ?? ''] ?? 'voir le schéma'}
+            </span>
+          </div>
+        </section>
+      )}
+      <section className="panneau-verre -mt-12 flex flex-col items-center gap-5 text-center p-[18px] sm:-mt-14">
+        {contenu}
+      </section>
+    </>
   );
 }
 
@@ -144,7 +189,9 @@ export default function DiagnosticVue({
   const cible = d?.cible ?? null;
 
   return (
-    <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-5 px-4 py-6">
+    <div
+      className={`${COUCHE_DESIGN === 'miroir' ? 'fond-miroir' : ''} mx-auto flex min-h-full w-full max-w-2xl flex-col gap-5 px-4 py-6`}
+    >
       <Entete onAccueil={onAccueil} />
 
       {erreur && (
@@ -201,7 +248,9 @@ export default function DiagnosticVue({
       {cible && <CoeurDiagnostic cible={cible} mesure={d?.mesure ?? null} />}
 
       {cible && (
-        <div className="flex flex-col items-stretch gap-3">
+        <div
+          className={`flex flex-col items-stretch gap-3 ${COUCHE_DESIGN === 'miroir' ? 'panneau-verre p-[18px]' : ''}`}
+        >
           <button type="button" className="bouton-primaire" onClick={onEntrainement}>
             Travailler ce son
           </button>
