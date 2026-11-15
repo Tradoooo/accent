@@ -304,9 +304,9 @@ rend rien tant que l'étape n'a rien produit — pas de boîte vide.
 
 ## 7. Fiabilité de livraison (CI / merge)
 
-- `.github/workflows/ci.yml` (runner self-hosted `accent-worker`, timeout 5 min) :
-  `npm ci` → typecheck → **16 tests** (`src/engine/engine.test.ts`) → build →
-  budget bundle (`tools/check-bundle-size.mjs`, 300 Ko gzip ; mesuré à **60,2 Ko**) →
+- `.github/workflows/ci.yml` (runner GitHub hébergé `ubuntu-latest`, timeout 5 min) :
+  `npm ci` → typecheck → **386 tests** (`npm test`) → build →
+  budget bundle (`tools/check-bundle-size.mjs`, 300 Ko gzip ; mesuré à **82,8 Ko**) →
   garde grep « aucun score global ».
 - `ci-budget.yml` : échoue si un job déclare > 5 min de timeout.
 - `hermes-lite.yml` + `.github/hermes/gate.py` : fraîcheur de branche exigée au merge ;

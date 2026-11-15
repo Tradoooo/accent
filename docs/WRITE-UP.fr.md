@@ -237,14 +237,15 @@ agent** (Hermes, `.github/workflows/hermes-lite.yml`).
 
 ## 10. État d'avancement (honnête)
 
-Au vert au moment de la préparation de la soumission : build TypeScript propre,
-**16/16 tests moteur** passants (médiane, refus d'instabilité, sélection de la cible
-unique, cas « rien à corriger » sans faux positif, cooldown de 7 jours des sons acquis),
-bundle JS initial **60,2 Ko gzip** (budget : 300 Ko), CI sur runners self-hosted avec
-budget de 5 min par job. Pas encore faits : déploiement public HTTPS, commit du worker
-proxy, cache d'entraînement complet (3/15 codes commités, le reste bascule sur des
-phrases générées localement), corpus audio de validation. On l'écrit parce qu'on préfère
-être vérifiés que crus.
+Au vert au moment de la soumission (2026-11-15) : build TypeScript propre,
+**386/386 tests** passants (pipeline complet, écrans, garde-fous), bundle JS initial
+**82,8 Ko gzip** (budget : 300 Ko), CI sur runners GitHub hébergés `ubuntu-latest` avec
+budget de 5 min par job, déploiement public HTTPS (GitHub Pages), commit du worker
+proxy (`worker/`). Pas encore faits : une **mesure réelle** derrière la démo
+(il faut une clé Azure Speech — la démo publique tourne sur un moteur local
+explicitement signalé « simulation »), le cache d'entraînement complet (3/15 codes
+commités, le reste bascule sur des phrases générées localement), le corpus audio de
+validation, la vidéo de démo. On l'écrit parce qu'on préfère être vérifiés que crus.
 
 ---
 

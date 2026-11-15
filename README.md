@@ -92,7 +92,8 @@ Système visuel unique, posé en tokens CSS (`src/index.css`) et repris par Tail
 | Mouvement | underwriting du titre, phonème héros, count-up — tout coupé par `prefers-reduced-motion` |
 
 L'écran est vérifié à 1440 px et 375 px (aucun défilement horizontal, cibles ≥ 48 px,
-texte ≥ 16 px, contraste AA) ; les captures sont dans `Design/accent/captures-opencode/`.
+texte ≥ 16 px, contraste AA) ; les captures sont dans [`docs/captures/`](docs/captures/)
+(Accueil et Diagnostic, 1440 px et 375 px), produites par `tools/capture-locale.mjs`.
 
 ## Lancer en local
 

@@ -222,13 +222,15 @@ explain every line; (d) merge conflicts are triaged by an **agent-assisted gate*
 
 ## 10. Current status (honest)
 
-Green at submission-prep time: TypeScript build clean, **16/16 engine tests passing**
-(median, stability refusal, unique-target selection, "nothing to fix" zero-false-positive
-case, 7-day acquired cooldown), initial JS bundle **60.2 KB gzipped** (budget: 300 KB),
-CI on self-hosted runners with a 5-minute budget per job. Not done yet: public HTTPS
-deployment, the proxy worker commit, the full 15-phoneme training cache (3/15 committed,
-the rest falls back to locally generated sentences), and the recorded validation corpus.
-We write this down because we would rather be checked than believed.
+Green at submission time (2026-11-15): TypeScript build clean, **386/386 tests passing**
+(full pipeline, screens, guardrails), initial JS bundle **82.8 KB gzipped** (budget:
+300 KB), CI on GitHub-hosted `ubuntu-latest` runners with a 5-minute budget per job,
+public HTTPS deployment on GitHub Pages, proxy worker committed (`worker/`).
+Not done yet: a real measurement behind the demo (needs an Azure Speech key — the
+public demo runs on a clearly labelled local simulation engine), the full 15-phoneme
+training cache (3/15 committed, the rest falls back to locally generated sentences),
+the recorded validation corpus, and the demo video. We write this down because we
+would rather be checked than believed.
 
 ---
 

@@ -42,7 +42,7 @@ formulaire) est fait avant.
 - [x] **Built with** : liste prête à coller dans le formulaire.
       → TypeScript, React 18, Vite 5, Tailwind CSS 3, Vitest 2, MediaRecorder + Web
       Audio API, Azure Speech Pronunciation Assessment (via proxy / BYOK), Cloudflare
-      Pages + Worker (prévu), GitHub Actions (self-hosted), Mergify. Outils IA :
+      Pages + Worker (prévu), GitHub Actions (`ubuntu-latest`), Mergify. Outils IA :
       voir `docs/AI-DISCLOSURE.md` (section « Built with » du formulaire : y reporter
       les agents IA d'assistance au code).
 - [ ] **Tracks** : Best AI Hack, Best Deployed / Shipped App, Best Design & UX, Overall.
@@ -58,8 +58,10 @@ formulaire) est fait avant.
 
 ### Critères d'acceptation internes (§25) — état réel
 
-- [x] Build vert : `npx tsc --noEmit` OK, `npx vitest run` 16/16 (vérifié le 2026-11-11)
-- [x] Bundle < 300 Ko gzip : 60,2 Ko mesurés (`npm run size`)
+- [x] Build vert : `npx tsc --noEmit` OK, `npx vitest run` **386/386** (vérifié le 2026-11-15)
+- [x] Bundle < 300 Ko gzip : **82,8 Ko** mesurés (`npm run size`)
+- [x] CI verte sur `ubuntu-latest` (runners GitHub hébergés), budget ≤ 5 min par job
+- [x] Pages à jour : build de `2670349`, aucun changement de `src/` depuis (vérifié le 2026-11-15)
 - [x] Aucun score global dans l'UI ni les types (garde grep en CI, `ci.yml`)
 - [x] Cas « rien à corriger » : état `rien_a_corriger` implémenté **et testé** (RNF-04)
 - [x] Écart > 20 pts → « mesure instable », pas un chiffre : implémenté **et testé** (RNF-11)
@@ -95,3 +97,92 @@ formulaire) est fait avant.
 3. **J4, avant 12h PT (21h Paris)** : soumettre. Puis revérifier que la vidéo se lance
    et que l'URL live répond, du 15 au 17 nov (RNF-08 : disponibilité 24h/24 pendant
    le jugement — le mode démo + BYOK couvrent une panne de quota).
+
+---
+
+# Brouillon du formulaire Devpost (à copier-coller)
+
+> État : prêt à coller, **non soumis**. Les champs entre `[ ]` sont à compléter par
+> Baptiste (vidéo, puis clic « Submit »). Aucune soumission automatique n'est faite
+> par un agent.
+
+## Nom du projet
+
+```
+Accent
+```
+
+## Tagline (une ligne)
+
+```
+It doesn't grade you. It names the sound that's off — one phoneme at a time.
+```
+
+## Description courte (accroche pour la carte projet)
+
+```
+Language apps give you a score. A score doesn't tell you what to fix. Accent listens
+to one sentence, isolates the exact phoneme that fails, shows a minimal pair
+(think → sink), and drills that single sound until it passes. No global score, no
+leaderboard, no account, no audio stored.
+```
+
+## Description longue (write-up — coller `docs/WRITE-UP.md`, 14 Ko, anglais)
+
+Sections : 1. The problem · 2. The thesis · 3. What we built · 4. Design decisions ·
+5. Technical architecture · 6. What failed · 7. What we learned · 8. What's next ·
+9. Honest limitations · 10. Try it yourself.
+
+Le write-up couvre déjà les cinq critères de jugement (Technical Execution,
+Creativity & Originality, Impact & Usefulness, Design & User Experience,
+Presentation) et la conformité « AI contributions must be disclosed ».
+
+## Built with
+
+```
+TypeScript, React 18, Vite 5, Tailwind CSS 3, Vitest 2, MediaRecorder + Web Audio API,
+Azure Speech Pronunciation Assessment (via server-side proxy or BYOK), Cloudflare
+Workers (proxy), GitHub Actions, Mergify
+AI tools used: Claude (Opus — ideation, design direction, write-up review),
+Claude (Fable — design boards / video script), opencode (implementation, tests,
+CI, docs), GitHub Copilot (occasional snippets). Full disclosure:
+https://github.com/Tradoooo/accent/blob/main/docs/AI-DISCLOSURE.md
+```
+
+## Tracks
+
+À cocher : **Best AI Hack** · **Best Deployed / Shipped App** · **Best Design & UX** ·
+**Overall Winner**.
+À NE PAS cocher : *Momen* (réservé aux projets no-code Momen) · *Hardware* (aucune pièce
+ physique). Justification : `docs/JUDGES.md` §3.
+
+## Liens
+
+| Champ | Valeur |
+|---|---|
+| Repository | https://github.com/Tradoooo/accent |
+| Live demo (try it out) | https://tradoooo.github.io/accent/ |
+| Video | `[LIEN YOUTUBE PUBLIC ≤ 3 min — à<uploader par Baptiste]` |
+| Other | `docs/WRITE-UP.md`, `docs/AI-DISCLOSURE.md`, `docs/ARCHITECTURE.md` |
+
+## À dire dans le champ libre / autres
+
+```
+Single-person team (Baptiste Faisy). 100% built during the hacking period (repo
+initialised 11/11/2026 — see git log). No account, no database, no audio stored:
+the app says so on screen and every claim points to the file in the repo that
+proves it (docs/CONFIDENTIALITE.md). The public demo runs on a local, clearly
+labelled "simulation" engine; bring your own Azure Speech key (Réglages → BYOK)
+for a real measurement. Only the text of the model audio ever leaves the device
+when using the ElevenLabs voice.
+```
+
+## Checklist finale avant de cliquer « Submit »
+
+- [ ] Vidéo YouTube **publique**, ≤ 3 min, projet **en fonctionnement** (testée en navigation privée).
+- [ ] « Join hackathon » fait pour le compte Devpost de Baptiste ; équipe de 1 (Baptiste seul).
+- [ ] Éligibilité vérifiée (13+, étudiant, hors professionnel).
+- [ ] Une seule soumission pour cette personne (Accent) ; Raturé/Errata n'est pas soumis.
+- [ ] Repo public + lien live testés (le lien live doit charger la démo).
+- [ ] Description, built with, tracks et liens collés ci-dessus.
+- [ ] Soumission **avant le 15/11 18:00 PT = 16/11 03:00 Paris** (cible 21:00 Paris).

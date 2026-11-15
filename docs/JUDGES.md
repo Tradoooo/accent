@@ -12,8 +12,8 @@
 |---|---|
 | Pipeline 5 étapes orchestré et chronométré (`msParEtape`, budget 10 s) | `src/engine/pipeline.ts` (`executerPipeline`) |
 | Chaîne de fiabilité : 3 lectures → médiane ; écart > 20 pts → **refus d'afficher** ; audio < 1,5 s → rejet avant tout appel API | `src/engine/measure.ts`, `src/engine/selectTarget.ts`, `src/constants.ts` (`ECART_MAX`, `DUREE_MIN_MS`, `LECTURES_REFERENCE`) |
-| **16 tests** moteur : médiane, instabilité, cible unique, « rien à corriger » (RNF-04), cooldown 7 jours, forçage du son | `src/engine/engine.test.ts` (`npm test`) |
-| Build TypeScript strict propre ; CI self-hosted avec budget 5 min/job ; garde-fou bundle (60,2 Ko gzip mesurés, budget 300 Ko) | `ci.yml`, `tools/check-bundle-size.mjs` |
+| **386 tests** : moteur, pipeline, écrans, garde-fous (`npm test`) | `src/engine/`, `tests/` (`npm test`) |
+| Build TypeScript strict propre ; CI `ubuntu-latest` avec budget 5 min/job ; garde-fou bundle (82,8 Ko gzip mesurés, budget 300 Ko) | `ci.yml`, `tools/check-bundle-size.mjs` |
 | Zéro dépendance runtime hors React ; audio 100 % natif (MediaRecorder + Web Audio, encodeur WAV maison, ré-échantillonnage 16 kHz) | `package.json`, `src/audio/wav.ts` |
 | Garde produit automatisée : la CI **échoue** si un score global apparaît dans le code | `ci.yml` (grep `scoreGlobal\|globalScore\|noteGlobale\|overallScore`) |
 
@@ -90,7 +90,7 @@ rien d'autre à l'écran. »
 | **Muskaan Irfan (TA Stanford, juge international)** | Enjeu réel des étudiants non-natifs : l'oral d'examen/entretien, travailler **sa** phrase, pas un cursus. Garde-fou 3 : compréhensible ≠ natif. |
 | **Fondateurs (Zoro, NovemberAI, Intellia)** | Thèse nette en une phrase, inversion défendable (« ton texte, pas notre programme »), marché évident, coût marginal ~0 (statique + cache). |
 | **Consultant BCG / Head of Growth** | Le pitch tient en une phrase ; le before/after se filme en 10 s ; la cible est immense ; le tableau concurrentiel est déjà fait (write-up §4). |
-| **Ingénieurs (Microsoft, Meta, BNSF, LPL)** | Zéro backend, proxy edge minimal, BYOK comme filet de quota, bundle 60 Ko gzip, CI 5 min sur runners self-hosted, 16 tests, types stricts, grep-garde produit. |
+| **Ingénieurs (Microsoft, Meta, BNSF, LPL)** | Zéro backend, proxy edge minimal, BYOK comme filet de quota, bundle 83 Ko gzip, CI 5 min sur runners GitHub (`ubuntu-latest`), 386 tests, types stricts, grep-garde produit. |
 
 **Avantage structurel** : CodeStarters est une asso dont la mission est l'**éducation**
 CS/IA. Trois juges enseignent. Un outil d'apprentissage de la prononciation ne passe pas
