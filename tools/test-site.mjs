@@ -47,10 +47,12 @@ const LECTURES = RAPIDE ? 2.0 : 2.4;
 async function testAccueil() {
   section('1. Accueil et hub des modes');
   const { texte, titre } = page();
-  verifie('titre de l’écran', /Quelle phrase veux-tu travailler/i.test(titre), titre);
+  verifie('titre de l’écran', /Elle ne te note pas/i.test(titre), titre);
+  verifie('question d’accueil', /Quelle phrase veux-tu travailler/i.test(texte));
   verifie('accroche produit', /Elle ne te note pas/i.test(texte));
   verifie('mention RNF-P5 à l’écran', /Ta voix n’est pas conservée/i.test(texte));
   verifie('hub « Tout ce que tu peux faire ici »', /Tout ce que tu peux faire ici/i.test(texte));
+  verifie('badge « simulation » à l’accueil (honnêteté §6)', /Simulation locale/i.test(texte));
   for (const mode of [
     'Travailler une phrase',
     'Travailler un texte long phrase par phrase',

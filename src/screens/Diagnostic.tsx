@@ -64,6 +64,11 @@ function CarteEtat({
   );
 }
 
+/** Nombre en toutes lettres jusqu'à trois (verrou V1 : un seul chiffre par écran). */
+function enLettres(n: number): string {
+  return ['zéro', 'un', 'deux', 'trois'][n] ?? String(n);
+}
+
 function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | null }) {
   const exp = expliquer(cible);
   const paire = pairePour(cible);
@@ -75,7 +80,7 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
         /{cible.entree.ipa}/
       </p>
 
-      <p className="text-xl leading-snug">
+      <p className="text-ligne leading-snug text-neutre">
         dans <strong lang="en">{cible.mot}</strong>
         {exp.ipaProduit ? (
           <>
@@ -86,7 +91,7 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
         )}
       </p>
 
-      <p className="text-6xl font-semibold" aria-label={`score du phonème : ${cible.score} sur 100`}>
+      <p className="font-mono text-chiffre font-bold" aria-label={`score du phonème : ${cible.score} sur 100`}>
         <CompteurAnime valeur={cible.score} depuis={0} dureeMs={700} suffixe=" /100" />
       </p>
 
@@ -111,9 +116,9 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
       {!exp.positionnel && <SchemaArticulatoire code={cible.code} />}
 
       <p className="max-w-prose text-base text-neutre">{cible.entree.conseil}</p>
-      <p className="text-sm text-neutre" aria-hidden="true">
+      <p className="text-[12.5px] text-neutre" aria-hidden="true">
         {'★'.repeat(cible.entree.difficulte)}
-        {'☆'.repeat(3 - cible.entree.difficulte)} · {cible.occurrences} occurrence
+        {'☆'.repeat(3 - cible.entree.difficulte)} · {enLettres(cible.occurrences)} occurrence
         {cible.occurrences > 1 ? 's' : ''} dans ta phrase
       </p>
     </div>
@@ -154,7 +159,7 @@ export default function DiagnosticVue({
       {d && (
         <section className="carte flex flex-col gap-3" aria-label="Ta phrase, mot par mot">
           <PhraseColoree phrase={phrase} scores={d.scores} motCible={cible?.mot} />
-          <div className="flex flex-wrap items-center gap-2 text-sm text-neutre">
+          <div className="flex flex-wrap items-center gap-3 text-sm text-neutre">
             <span className="inline-flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-acquis" aria-hidden="true" /> acquis
             </span>
@@ -162,8 +167,8 @@ export default function DiagnosticVue({
               <span className="h-2 w-2 rounded-full bg-aTravailler" aria-hidden="true" /> à travailler
             </span>
             {resultat?.simule && (
-              <span className="etiquette ml-auto border-aTravailler/50 text-aTravailler">
-                Mode démonstration — mesure simulée, pas une évaluation réelle
+              <span className="badge-simulation ml-auto" role="status">
+                Simulation — mode démonstration : mesure simulée, pas une évaluation réelle
               </span>
             )}
           </div>
@@ -196,21 +201,23 @@ export default function DiagnosticVue({
       {cible && <CoeurDiagnostic cible={cible} mesure={d?.mesure ?? null} />}
 
       {cible && (
-        <div className="flex flex-wrap justify-center gap-3">
-          <button type="button" className="bouton-primaire" onClick={onReessayer}>
-            Réessayer ce mot
-          </button>
-          <button type="button" className="bouton-secondaire" onClick={onEntrainement}>
+        <div className="flex flex-col items-stretch gap-3">
+          <button type="button" className="bouton-primaire" onClick={onEntrainement}>
             Travailler ce son
           </button>
-          {onPerception && !exp_positionnel(cible) && (
-            <button type="button" className="bouton-secondaire" onClick={onPerception}>
-              Entraîner mon oreille d’abord
-            </button>
-          )}
-          <button type="button" className="bouton-fantome" onClick={onAccueil}>
-            Autre phrase
+          <button type="button" className="bouton-fantome" onClick={onReessayer}>
+            Réessayer ce mot
           </button>
+          <div className="flex flex-wrap justify-center gap-3">
+            {onPerception && !exp_positionnel(cible) && (
+              <button type="button" className="bouton-secondaire" onClick={onPerception}>
+                Entraîner mon oreille d’abord
+              </button>
+            )}
+            <button type="button" className="bouton-fantome" onClick={onAccueil}>
+              Autre phrase
+            </button>
+          </div>
         </div>
       )}
 

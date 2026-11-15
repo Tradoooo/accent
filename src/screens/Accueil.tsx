@@ -6,6 +6,10 @@ import { LANGUES } from '../providers';
 /**
  * Écran 1 — Accueil : un champ « Quelle phrase veux-tu travailler ? » et les
  * 10 phrases prêtes. Rien d'autre : ton texte, pas notre programme (§4).
+ *
+ * Verrou design V1 (Design/accent/HANDOFF.md, couche socle « Veille ») :
+ * titre avec souligné dessiné, carte de saisie, badge Simulation, grille 2×2
+ * des modes, phrases prêtes en pastilles défilantes, halo + grille en fond.
  */
 
 export interface Props {
@@ -26,27 +30,52 @@ export interface Props {
   onCatalogue?: () => void;
 }
 
+/** Le badge Simulation ne s'affiche que quand le moteur local tourne. */
+function estSimulation(fournisseur: string): boolean {
+  return /simul/i.test(fournisseur);
+}
+
 export default function Accueil(p: Props) {
   const reste = PHRASE_MAX_CAR - p.phrase.length;
   return (
-    <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-6 px-4 py-6">
+    <div className="fond-halos mx-auto flex min-h-full w-full max-w-2xl flex-col gap-7 px-4 pb-8 pt-6">
       <Entete onProfil={p.onProfil} onReglages={p.onReglages} />
 
-      <p className="text-center text-lg text-neutre sm:text-xl">
-        Elle ne te note pas. <span className="text-texte">Elle te montre le son qui cloche.</span>
-      </p>
+      <h1 className="text-center text-[31px] font-extrabold leading-tight tracking-tight sm:text-[34px]">
+        Elle ne te note pas. Elle te montre{' '}
+        <span className="relative inline-block whitespace-nowrap text-aTravailler">
+          le son qui cloche
+          <svg
+            className="absolute -bottom-2 left-0 w-full"
+            viewBox="0 0 300 12"
+            aria-hidden="true"
+            focusable="false"
+            preserveAspectRatio="none"
+          >
+            <path
+              className="souligne-trait"
+              d="M 4 8 Q 150 2 296 7"
+              fill="none"
+              stroke="var(--amb)"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
+        .
+      </h1>
 
       <section className="carte flex flex-col gap-4">
-        <h1 className="text-2xl font-semibold leading-snug">Quelle phrase veux-tu travailler ?</h1>
+        <h2 className="text-2xl font-semibold leading-snug">Quelle phrase veux-tu travailler ?</h2>
         <p className="text-neutre">
           Celle de ton exposé, de ton entretien, de ton oral. On ne t’entraîne pas sur notre cours :
           on t’entraîne sur <strong className="text-texte">ton texte</strong>.
         </p>
         <label className="flex flex-col gap-2" htmlFor="phrase">
-          <span className="text-sm text-neutre">Ta phrase (200 caractères max)</span>
+          <span className="etiquette">Ta phrase — 200 caractères max</span>
           <textarea
             id="phrase"
-            className="min-h-24 w-full resize-y rounded-xl border border-nuit-bord bg-nuit p-4 text-lg
+            className="min-h-24 w-full resize-y rounded-[14px] border border-nuit-bord bg-nuit p-4 text-lg
               focus:border-acquis focus:outline-none"
             value={p.phrase}
             maxLength={PHRASE_MAX_CAR}
@@ -68,7 +97,7 @@ export default function Accueil(p: Props) {
             Je la lis à voix haute
           </button>
           <select
-            className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-3 text-base"
+            className="min-h-[48px] rounded-[14px] border border-nuit-bord bg-nuit px-3 text-base"
             value={p.langueCible}
             aria-label="Paire de langues"
             onChange={(e) => p.onLangue(e.target.value as LangueCible)}
@@ -81,15 +110,19 @@ export default function Accueil(p: Props) {
             ))}
           </select>
         </div>
+
+        {estSimulation(p.fournisseur) && (
+          <p className="badge-simulation self-start" role="status">
+            Simulation locale · pas de clé de mesure
+          </p>
+        )}
         <p className="text-sm text-neutre">Moteur : {p.fournisseur}</p>
       </section>
 
       {(p.onOralLong || p.onCatalogue) && (
         <section className="flex flex-col gap-3" aria-label="Autres façons de travailler">
-          <h2 className="text-sm uppercase tracking-wide text-neutre">
-            Tout ce que tu peux faire ici
-          </h2>
-          <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <h2 className="etiquette">Tout ce que tu peux faire ici</h2>
+          <ul className="grid grid-cols-2 gap-3">
             <li>
               <ModeCarte
                 titre="Une phrase"
@@ -131,15 +164,15 @@ export default function Accueil(p: Props) {
       )}
 
       <section className="flex flex-col gap-3" aria-label="Phrases prêtes">
-        <h2 className="text-sm uppercase tracking-wide text-neutre">Ou pars d’une de ces phrases</h2>
-        <ul className="flex flex-col gap-2">
+        <h2 className="etiquette">Ou pars d’une de ces phrases</h2>
+        <ul className="snap-x flex gap-2 overflow-x-auto pb-2">
           {p.phrasesPretes.map((texte) => (
-            <li key={texte}>
+            <li key={texte} className="snap-start shrink-0">
               <button
                 type="button"
                 onClick={() => p.onPhrase(texte)}
-                className="w-full rounded-xl border border-nuit-bord bg-nuit-carte px-4 py-3 text-left
-                  text-base hover:border-neutre/50"
+                className="h-full max-w-[320px] whitespace-normal rounded-[14px] border border-nuit-bord
+                  bg-nuit-carte px-4 py-3 text-left text-base hover:border-neutre/50"
                 lang="en"
               >
                 {texte}
@@ -162,7 +195,6 @@ export default function Accueil(p: Props) {
   );
 }
 
-
 /** Carte de mode : une entrée visible par fonctionnalité (aucune feature cachée). */
 function ModeCarte({
   titre,
@@ -180,10 +212,10 @@ function ModeCarte({
       type="button"
       onClick={onClick}
       aria-label={ariaLabel}
-      className="flex min-h-[48px] w-full flex-col items-start gap-1 rounded-xl border border-nuit-bord
+      className="flex min-h-[48px] w-full flex-col items-start gap-1 rounded-[14px] border border-nuit-bord
         bg-nuit-carte px-4 py-3 text-left hover:border-neutre/50"
     >
-      <span className="text-base font-medium">{titre}</span>
+      <span className="text-base font-semibold">{titre}</span>
       <span className="text-sm text-neutre">{texte}</span>
     </button>
   );

@@ -76,19 +76,39 @@ Et techniquement : aucun compte, aucune base de données, aucun audio conservé 
 Le profil vit dans ton navigateur, exportable et supprimable en un clic
 (`toutEffacer()` / `exporterMarkdown()`, `src/store/profile.ts`).
 
+## Design (verrou V1, 2026-11-15)
+
+Système visuel unique, posé en tokens CSS (`src/index.css`) et repris par Tailwind
+(`tailwind.config.js`) :
+
+| Règle | Valeur |
+|---|---|
+| Fond / carte / bord | `#0b0f14` · `#141b23` · `#22303c` |
+| **Ambre** = son à travailler | `#f2a33c` (jamais de note globale) |
+| **Vert** = acquis, action principale | `#4ec98a` |
+| **Rouge** = erreurs système **uniquement** (micro bloqué, échec réseau) | `#e5484d` |
+| Typo | sans = Inter/system-ui · mono = JetBrains Mono/ui-monospace (phonèmes, chiffres) |
+| Un seul chiffre par écran | le score du son ciblé `/100` ; les autres nombres passent en mots ou en `aria-label` |
+| Mouvement | underwriting du titre, phonème héros, count-up — tout coupé par `prefers-reduced-motion` |
+
+L'écran est vérifié à 1440 px et 375 px (aucun défilement horizontal, cibles ≥ 48 px,
+texte ≥ 16 px, contraste AA) ; les captures sont dans `Design/accent/captures-opencode/`.
+
 ## Lancer en local
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
-npm test           # vitest — 16 tests moteur (médiane, stabilité, sélection, RNF-04/11)
+npm test           # vitest — 386 tests (moteur, pipeline, écrans, garde-fous)
 npm run build      # tsc --noEmit + vite build
-npm run size       # garde RNF-07 : bundle < 300 Ko gzip (actuellement ~60 Ko)
+npm run size       # garde RNF-07 : bundle < 300 Ko gzip (actuellement ~83 Ko)
 ```
 
 Sans clé API ni proxy configuré, l'app démarre sur le **moteur de démonstration local**
 (`src/providers/demo.ts`) : elle est entièrement cliquable, et chaque mesure simulée est
-signalée « simulation » à l'écran — jamais de bluff.
+signalée « simulation » à l'écran — jamais de bluff. Le badge est visible sur **l'Accueil**
+(« Simulation locale · pas de clé de mesure ») **et sur le Diagnostic**
+(« Simulation — mode démonstration : mesure simulée, pas une évaluation réelle »).
 
 ## Démo publique
 
@@ -114,7 +134,7 @@ ou sous un sous-chemin (`/accent/` sur Pages). Le micro exige **HTTPS** (ou loca
 
 ## État d'avancement (honnête)
 
-**Fait et vérifié** (`npx tsc --noEmit` + `npx vitest run` : **344/344**, bundle 76,6 Ko gzip) :
+**Fait et vérifié** (`npx tsc --noEmit` + `npx vitest run` : **386/386**, bundle 82,8 Ko gzip) :
 
 - Pipeline 5 étapes (`src/engine/`) et **deux taxonomies fermées** dans
   `src/data/phonemes.ts` : 15 phonèmes FR→EN (P01..P15) et 9 ES→FR (E01..E09),
@@ -163,8 +183,9 @@ ou sous un sous-chemin (`/accent/` sur Pages). Le micro exige **HTTPS** (ou loca
   dépendance (`server/`), une seule logique partagée (`server/lib.mjs`).
 - Deux hébergements publics vérifiés : GitHub Pages (URL stable) et le serveur
   r630 derrière un tunnel (`tools/deploy/`).
-- CI self-hosted (≤ 5 min par job), file de merge Mergify, agent Hermes de
-  résolution de conflits sur InferHub, garde « aucun score global ».
+- CI sur runners GitHub hébergés (`ubuntu-latest`), budget ≤ 5 minutes par job,
+  file de merge Mergify, agent Hermes de résolution de conflits sur InferHub,
+  garde « aucun score global ».
 
 **Prévu / non implémenté** :
 
@@ -193,7 +214,7 @@ ou sous un sous-chemin (`/accent/` sur Pages). Le micro exige **HTTPS** (ou loca
 
 ## Développer
 
-- CI : `ci.yml` sur runners self-hosted (`accent-worker`), **budget 5 minutes** par job.
+- CI : `ci.yml` sur runners GitHub hébergés (`ubuntu-latest`), **budget 5 minutes** par job.
 - File de merge : Mergify (`.mergify.yml`), rebase, historique linéaire.
 - Gate : `.github/workflows/hermes-lite.yml` (fraîcheur de branche exigée au merge) ;
   les vrais conflits partent à l'agent de résolution (label `hermes/conflit`).

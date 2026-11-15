@@ -13,7 +13,7 @@ import type { CodePhoneme } from '../types';
  * légende textuelle sous le dessin — le schéma n'est jamais la seule information.
  */
 
-const BLEU = '#8ecae6';
+const AMBRE = 'var(--amb)';
 
 export interface Props {
   code: CodePhoneme;
@@ -53,7 +53,7 @@ function Levres({ a }: { a: Articulation }) {
       <path d={`M ${x} ${46 - e / 2} q -7 ${e / 2} 0 ${e / 2 + 1}`} />
       <path d={`M ${x} ${54 + e / 2} q -7 ${-e / 2} 0 ${-e / 2 - 1}`} />
       {a.levres === 'dents-levre' && (
-        <path d={`M ${x + 1} 50 l 5 4`} stroke={BLEU} strokeWidth={2.5} />
+        <path d={`M ${x + 1} 50 l 5 4`} stroke={AMBRE} strokeWidth={2.5} />
       )}
     </g>
   );
@@ -73,8 +73,8 @@ function Voile({ a }: { a: Articulation }) {
       />
       {a.nasal && (
         <>
-          <path d="M 84 48 q 4 -14 -6 -20" stroke={BLEU} strokeWidth={1.5} fill="none" strokeDasharray="3 2" />
-          <text x="88" y="26" fontSize="6" fill={BLEU}>nez</text>
+          <path d="M 84 48 q 4 -14 -6 -20" stroke={AMBRE} strokeWidth={1.5} fill="none" strokeDasharray="3 2" />
+          <text x="88" y="26" fontSize={6} fill={AMBRE}>nez</text>
         </>
       )}
     </g>
@@ -98,13 +98,13 @@ function Marqueurs({ a }: { a: Articulation }) {
   return (
     <g>
       {a.voise && (
-        <g stroke={BLEU} strokeWidth={1.4} fill="none">
+        <g stroke={AMBRE} strokeWidth={1.4} fill="none">
           <path d="M 66 90 q 3 -3 6 0" />
           <path d="M 63 94 q 6 -6 12 0" />
         </g>
       )}
       {a.souffle && (
-        <g stroke={BLEU} strokeWidth={1.2} strokeDasharray="2 2" fill="none">
+        <g stroke={AMBRE} strokeWidth={1.2} strokeDasharray="2 2" fill="none">
           <path d="M 40 50 l -14 0" />
           <path d="M 40 55 l -18 0" />
         </g>
@@ -120,14 +120,14 @@ export default function SchemaArticulatoire({ code, hauteur = 150, className = '
   const label = `Coupe sagittale pour le son /${code}/ : ${a.legende}`;
 
   return (
-    <figure className={`flex flex-col items-center gap-2 ${className}`}>
+    <figure className={`encart flex flex-col items-center gap-2 ${className}`}>
       <svg
         viewBox="0 0 120 100"
         width="100%"
         height={hauteur}
         role="img"
         aria-label={label}
-        className="max-w-[280px] text-neutre"
+        className="max-w-[280px] text-nuit-bord2"
         focusable="false"
       >
         <title>{label}</title>
@@ -138,21 +138,21 @@ export default function SchemaArticulatoire({ code, hauteur = 150, className = '
         />
         {/* Palais dur + dents */}
         <path d="M 32 46 Q 46 36 62 42" fill="none" stroke="currentColor" strokeWidth={2} />
-        <path d="M 32 46 l 2 8" stroke="currentColor" strokeWidth={2} />
-        <path d="M 34 66 l 2 -8" stroke="currentColor" strokeWidth={2} />
+        <path d="M 32 46 l 2 8" stroke="var(--texte)" strokeWidth={2} />
+        <path d="M 34 66 l 2 -8" stroke="var(--texte)" strokeWidth={2} />
         <Voile a={a} />
         {/* Langue */}
         <path d={cheminLangue(a)} fill="currentColor" opacity={0.55} />
         <Levres a={a} />
         <Marqueurs a={a} />
-        {/* Zone active */}
-        <circle cx={zone.x} cy={zone.y} r={5.5} fill="none" stroke={BLEU} strokeWidth={2} />
-        <circle cx={zone.x} cy={zone.y} r={1.8} fill={BLEU} />
+        {/* Zone active — la cible de l'effort, en ambre (jamais rouge). */}
+        <circle cx={zone.x} cy={zone.y} r={5.5} fill="none" stroke={AMBRE} strokeWidth={2} />
+        <circle cx={zone.x} cy={zone.y} r={1.8} fill={AMBRE} />
       </svg>
       <figcaption className="text-center text-sm text-neutre">
         {a.legende}
-        {a.voise && <span className="ml-1 text-[#8ecae6]">· cordes vocales en vibration</span>}
-        {a.nasal && <span className="ml-1 text-[#8ecae6]">· air par le nez</span>}
+        {a.voise && <span className="ml-1 text-aTravailler">· cordes vocales en vibration</span>}
+        {a.nasal && <span className="ml-1 text-aTravailler">· air par le nez</span>}
       </figcaption>
     </figure>
   );

@@ -29,19 +29,25 @@ export default function FourchetteScore({ mediane, min, max, lectures, auBordDuS
   const uneSeule = lectures <= 1;
   return (
     <div className="flex w-full flex-col gap-2">
+      {/* Barre sans chiffres visibles (verrou V1) : piste, repères aux seuils,
+          bande min–max ambre (verte si la médiane est acquise), trait médiane.
+          Les valeurs restent dans l'aria-label. */}
       <div
-        className="relative h-2 w-full rounded-full bg-neutre-doux"
+        className="relative h-3 w-full rounded-full bg-carte2"
         role="img"
         aria-label={`Score ${mediane} sur 100, observé entre ${min} et ${max} sur ${lectures} lecture${lectures > 1 ? 's' : ''}`}
       >
-        {/* Seuils de décision : repères discrets, jamais une note. */}
-        <span className="absolute top-0 h-full w-px bg-neutre/40" style={{ left: `${SEUIL_A_TRAVAILLER}%` }} />
-        <span className="absolute top-0 h-full w-px bg-neutre/40" style={{ left: `${SEUIL_ACQUIS}%` }} />
+        {/* Seuils de décision : repères discrets, sans libellé, jamais une note. */}
+        <span className="absolute top-0 h-full w-px bg-nuit-bord2" style={{ left: `${SEUIL_A_TRAVAILLER}%` }} />
+        <span className="absolute top-0 h-full w-px bg-nuit-bord2" style={{ left: `${SEUIL_ACQUIS}%` }} />
         {!uneSeule && (
-          <span className="absolute top-0 h-full rounded-full bg-neutre/50" style={styleBarre(min, max)} />
+          <span
+            className={`fourchette-bande absolute top-0 h-full ${mediane >= SEUIL_ACQUIS ? 'fourchette-bande-vert' : 'fourchette-bande-amb'}`}
+            style={styleBarre(min, max)}
+          />
         )}
         <span
-          className="absolute -top-1 h-4 w-1 rounded bg-acquis"
+          className="absolute -top-[3px] h-[18px] w-1 rounded bg-acquis"
           style={{ left: `calc(${Math.max(0, Math.min(100, mediane))}% - 2px)` }}
           aria-hidden="true"
         />

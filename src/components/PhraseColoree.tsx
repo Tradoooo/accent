@@ -33,7 +33,7 @@ export default function PhraseColoree({ phrase, scores, motCible }: Props) {
   const parMot = pireParMot(scores);
   const mots = phrase.split(/\s+/);
   return (
-    <p className="text-xl leading-relaxed sm:text-2xl" lang="en">
+    <p className="text-phrase leading-relaxed" lang="en">
       {mots.map((mot, i) => {
         const nu = mot.toLowerCase().replace(/[^a-z']/g, '');
         const estCible = Boolean(motCible) && nu === motCible!.toLowerCase();

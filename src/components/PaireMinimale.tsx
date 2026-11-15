@@ -29,13 +29,10 @@ function segments(mot: string, indice?: string): Array<{ t: string; fort: boolea
 
 function Mot({ mot, indice, tone }: { mot: string; indice?: string; tone: 'cible' | 'entendu' }) {
   return (
-    <span className="flex flex-col items-center gap-1">
-      <span
-        lang="en"
-        className={`text-2xl font-semibold sm:text-3xl ${
-          tone === 'cible' ? 'text-acquis' : 'text-aTravailler'
-        }`}
-      >
+    <span
+      className={`paire-cell ${tone === 'cible' ? 'paire-cell-cible paire-fleche' : ''}`}
+    >
+      <span lang="en" className="font-semibold">
         {segments(mot, indice).map((s, i) =>
           s.fort ? (
             <mark key={i} className="rounded bg-transparent underline decoration-2 underline-offset-4">
@@ -46,7 +43,7 @@ function Mot({ mot, indice, tone }: { mot: string; indice?: string; tone: 'cible
           ),
         )}
       </span>
-      <span className="text-xs uppercase tracking-wide text-neutre">
+      <span className="text-[11px] uppercase tracking-[0.12em] text-neutre">
         {tone === 'cible' ? 'à dire' : 'entendu'}
       </span>
     </span>
@@ -58,12 +55,11 @@ export default function PaireMinimale({ paire, indice, cible }: Props) {
   const entendu = attendu === paire[0] ? paire[1] : paire[0];
   return (
     <div
-      className="flex items-center justify-center gap-4 rounded-2xl border border-nuit-bord bg-nuit px-5 py-4 sm:gap-8"
+      className="flex w-full gap-3"
       role="group"
       aria-label={`Paire minimale : ${attendu} ne doit pas devenir ${entendu}`}
     >
       <Mot mot={attendu} indice={indice} tone="cible" />
-      <span className="text-2xl text-neutre" aria-hidden="true">≠</span>
       <Mot mot={entendu} tone="entendu" />
     </div>
   );
