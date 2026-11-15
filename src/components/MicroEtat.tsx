@@ -60,7 +60,7 @@ export default function MicroEtat({ detaille = false, onPret, className = '' }: 
 
   return (
     <div
-      className={`flex flex-col gap-2 rounded-xl border border-aTravailler/40 bg-aTravailler-doux p-3 ${className}`}
+      className={`flex flex-col gap-2 rounded-none border border-aTravailler/40 bg-aTravailler-doux p-3 ${className}`}
       role="status"
     >
       <p className="text-base font-medium text-aTravailler">{etat.message}</p>

@@ -40,7 +40,7 @@ function horodatage(iso: string): string {
 
 function Bloc({ preuve }: { preuve: Preuve }) {
   return (
-    <div className="rounded-xl border border-acquis/40 bg-acquis-doux p-3">
+    <div className="rounded-none border border-acquis/40 bg-acquis-doux p-3">
       <p className="flex items-baseline gap-2 text-base font-medium text-acquis">
         <span aria-hidden="true">✓</span>
         <span>{preuve.titre}</span>

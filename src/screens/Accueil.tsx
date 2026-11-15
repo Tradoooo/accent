@@ -7,9 +7,9 @@ import { LANGUES } from '../providers';
  * Écran 1 — Accueil : un champ « Quelle phrase veux-tu travailler ? » et les
  * 10 phrases prêtes. Rien d'autre : ton texte, pas notre programme (§4).
  *
- * Verrou design V1 (Design/accent/HANDOFF.md, couche socle « Veille ») :
- * titre avec souligné dessiné, carte de saisie, badge Simulation, grille 2×2
- * des modes, phrases prêtes en pastilles défilantes, halo + grille en fond.
+ * Verrou design V7 « Riso » (Design/accent/HANDOFF.md [Claude] VERROU V7) :
+ * titre en encre puis en double encre (vert + ambre décalé), cadre de saisie,
+ * tampon Simulation, bande des modes, phrases prêtes, trame ambre en fond.
  */
 
 export interface Props {
@@ -38,35 +38,18 @@ function estSimulation(fournisseur: string): boolean {
 export default function Accueil(p: Props) {
   const reste = PHRASE_MAX_CAR - p.phrase.length;
   return (
-    <div className="fond-halos mx-auto flex min-h-full w-full max-w-2xl flex-col gap-7 px-4 pb-8 pt-6">
+    <div className="fond-halos mx-auto flex min-h-full w-full max-w-4xl flex-col gap-7 overflow-x-clip px-4 pb-10 pt-6 sm:px-8">
       <Entete onProfil={p.onProfil} onReglages={p.onReglages} />
 
-      <h1 className="text-center text-[31px] font-extrabold leading-tight tracking-tight sm:text-[34px]">
-        Elle ne te note pas. Elle te montre{' '}
-        <span className="relative inline-block whitespace-nowrap text-aTravailler">
-          le son qui cloche
-          <svg
-            className="absolute -bottom-2 left-0 w-full"
-            viewBox="0 0 300 12"
-            aria-hidden="true"
-            focusable="false"
-            preserveAspectRatio="none"
-          >
-            <path
-              className="souligne-trait"
-              d="M 4 8 Q 150 2 296 7"
-              fill="none"
-              stroke="var(--amb)"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-            />
-          </svg>
+      <h1 className="pt-2 text-[44px] font-bold leading-[0.95] tracking-[-0.045em] sm:text-[76px]">
+        Elle ne te note pas.{' '}
+        <span className="double-encre text-acquis" data-texte="Elle te montre le son qui cloche.">
+          Elle te montre le son qui cloche.
         </span>
-        .
       </h1>
 
       <section className="carte flex flex-col gap-4">
-        <h2 className="text-2xl font-semibold leading-snug">Quelle phrase veux-tu travailler ?</h2>
+        <h2 className="text-2xl font-bold leading-snug tracking-tight">Quelle phrase veux-tu travailler ?</h2>
         <p className="text-neutre">
           Celle de ton exposé, de ton entretien, de ton oral. On ne t’entraîne pas sur notre cours :
           on t’entraîne sur <strong className="text-texte">ton texte</strong>.
@@ -75,14 +58,14 @@ export default function Accueil(p: Props) {
           <span className="etiquette">Ta phrase — 200 caractères max</span>
           <textarea
             id="phrase"
-            className="min-h-24 w-full resize-y rounded-[14px] border border-nuit-bord bg-nuit p-4 text-lg
-              focus:border-acquis focus:outline-none"
+            className="min-h-24 w-full resize-y rounded-none border-0 border-b-[3px] border-nuit-bord bg-transparent px-1 py-3
+              text-[24px] font-medium leading-snug tracking-tight caret-[#f2a33c] focus:bg-nuit focus:outline-none sm:text-[30px]"
             value={p.phrase}
             maxLength={PHRASE_MAX_CAR}
             lang={p.langueCible}
             onChange={(e) => p.onPhrase(e.target.value)}
           />
-          <span className="text-right text-sm text-neutre" aria-live="polite">
+          <span className="text-right font-mono text-sm text-neutre" aria-live="polite">
             {reste} caractères restants
           </span>
         </label>
@@ -97,7 +80,7 @@ export default function Accueil(p: Props) {
             Je la lis à voix haute
           </button>
           <select
-            className="min-h-[48px] rounded-[14px] border border-nuit-bord bg-nuit px-3 text-base"
+            className="min-h-[48px] rounded-none border-2 border-nuit-bord bg-nuit-carte px-3 text-base font-medium"
             value={p.langueCible}
             aria-label="Paire de langues"
             onChange={(e) => p.onLangue(e.target.value as LangueCible)}
@@ -122,7 +105,7 @@ export default function Accueil(p: Props) {
       {(p.onOralLong || p.onCatalogue) && (
         <section className="flex flex-col gap-3" aria-label="Autres façons de travailler">
           <h2 className="etiquette">Tout ce que tu peux faire ici</h2>
-          <ul className="grid grid-cols-2 gap-3">
+          <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <li>
               <ModeCarte
                 titre="Une phrase"
@@ -171,8 +154,8 @@ export default function Accueil(p: Props) {
               <button
                 type="button"
                 onClick={() => p.onPhrase(texte)}
-                className="h-full max-w-[320px] whitespace-normal rounded-[14px] border border-nuit-bord
-                  bg-nuit-carte px-4 py-3 text-left text-base hover:border-neutre/50"
+                className="h-full max-w-[320px] whitespace-normal rounded-none border-2 border-nuit-bord
+                  bg-nuit-carte px-4 py-3 text-left text-base font-medium hover:bg-carte2"
                 lang="en"
               >
                 {texte}
@@ -212,10 +195,10 @@ function ModeCarte({
       type="button"
       onClick={onClick}
       aria-label={ariaLabel}
-      className="flex min-h-[48px] w-full flex-col items-start gap-1 rounded-[14px] border border-nuit-bord
-        bg-nuit-carte px-4 py-3 text-left hover:border-neutre/50"
+      className="flex h-full min-h-[48px] w-full flex-col items-start gap-1 rounded-none border-0 border-t-[3px]
+        border-nuit-bord bg-transparent px-1 py-3 text-left hover:bg-carte2"
     >
-      <span className="text-base font-semibold">{titre}</span>
+      <span className="text-[17px] font-bold">{titre}</span>
       <span className="text-sm text-neutre">{texte}</span>
     </button>
   );

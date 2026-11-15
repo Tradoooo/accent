@@ -39,7 +39,7 @@ export default function Entrainement({ cible, phrases, onPhrase, onQuitter, onPe
             <p className="text-2xl leading-relaxed" lang="en">
               {p.texte.split(new RegExp(`(${p.motCle})`, 'i')).map((morceau, i) =>
                 morceau.toLowerCase() === p.motCle.toLowerCase() ? (
-                  <mark key={i} className="rounded bg-aTravailler-doux px-1 text-aTravailler">
+                  <mark key={i} className="rounded-none bg-aTravailler-doux px-1 text-aTravailler">
                     {morceau}
                   </mark>
                 ) : (

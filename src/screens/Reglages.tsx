@@ -67,7 +67,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
               id="cle"
               type="password"
               autoComplete="off"
-              className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-4 text-base text-texte"
+              className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-4 text-base text-texte"
               value={etat.cleAzure}
               onChange={(e) => maj({ cleAzure: e.target.value.trim() })}
             />
@@ -76,7 +76,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
             Région (ex. westeurope)
             <input
               id="region"
-              className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-4 text-base text-texte"
+              className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-4 text-base text-texte"
               value={etat.regionAzure}
               onChange={(e) => maj({ regionAzure: e.target.value.trim() })}
             />
@@ -85,7 +85,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
             URL du proxy (vide = même origine)
             <input
               id="proxy"
-              className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-4 text-base text-texte"
+              className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-4 text-base text-texte"
               value={etat.urlProxy}
               onChange={(e) => maj({ urlProxy: e.target.value.trim() })}
             />
@@ -98,7 +98,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
             Lectures pour conclure
             <select
               id="lectures"
-              className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-3"
+              className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-3"
               value={etat.lectures}
               onChange={(e) => maj({ lectures: Number(e.target.value) })}
             >
@@ -110,7 +110,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
             Paire de langues
             <select
               id="langue"
-              className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-3"
+              className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-3"
               value={etat.langueCible}
               onChange={(e) => maj({ langueCible: e.target.value as LangueCible })}
             >
@@ -133,7 +133,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
             Moteur
             <select
               id="moteurTts"
-              className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-3 text-base text-texte"
+              className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-3 text-base text-texte"
               value={etat.moteurTts}
               onChange={(e) => maj({ moteurTts: e.target.value as Reglages['moteurTts'] })}
             >
@@ -150,7 +150,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
                   id="cleEleven"
                   type="password"
                   autoComplete="off"
-                  className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-4 text-base text-texte"
+                  className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-4 text-base text-texte"
                   value={etat.cleEleven}
                   onChange={(e) => maj({ cleEleven: e.target.value.trim() })}
                 />
@@ -214,7 +214,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
               </div>
 
               {voix.length > 0 && (
-                <ul className="flex max-h-56 flex-col gap-1 overflow-auto rounded-xl border border-nuit-bord p-2">
+                <ul className="flex max-h-56 flex-col gap-1 overflow-auto rounded-none border border-nuit-bord p-2">
                   {voix.map((v) => (
                     <li key={v.voice_id}>
                       <label className="flex min-h-[48px] items-center gap-2 text-sm">
@@ -236,7 +236,7 @@ export default function ReglagesVue({ reglages, onEnregistrer, onRetour }: Props
                 Identifiant de voix
                 <input
                   id="voixEleven"
-                  className="min-h-[48px] rounded-xl border border-nuit-bord bg-nuit px-4 font-mono text-sm text-texte"
+                  className="min-h-[48px] rounded-none border border-nuit-bord bg-nuit px-4 font-mono text-sm text-texte"
                   value={etat.voixEleven}
                   onChange={(e) => maj({ voixEleven: e.target.value.trim() })}
                 />

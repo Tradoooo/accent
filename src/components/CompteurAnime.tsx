@@ -57,7 +57,7 @@ export default function CompteurAnime({
     <span className={`tabular-nums ${className}`} aria-live="polite"
       aria-label={label ?? `${valeur}${suffixe}`}>
       {affiche}
-      {suffixe && <span className="text-base text-neutre">{suffixe}</span>}
+      {suffixe && <span className="ml-1 text-lg font-medium tracking-normal text-neutre">{suffixe}</span>}
     </span>
   );
 }

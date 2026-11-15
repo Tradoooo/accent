@@ -73,14 +73,20 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
   const exp = expliquer(cible);
   const paire = pairePour(cible);
   return (
-    <div className="carte flex flex-col items-center gap-5 text-center">
-      <p className="etiquette">Le son à travailler — un seul</p>
+    <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:items-start">
+    <div className="carte flex min-h-[260px] flex-col justify-between gap-4 overflow-hidden">
+      <span className="trame -bottom-20 -left-20 h-56 w-56" aria-hidden="true" />
+      <p className="etiquette relative">Le son à travailler — un seul</p>
 
-      <p className="phoneme-heros" aria-label={`phonème cible ${cible.entree.ipa}`}>
+      <p
+        className="phoneme-heros self-end !text-[clamp(96px,26vw,180px)] leading-[0.8]"
+        aria-label={`phonème cible ${cible.entree.ipa}`}
+        data-texte={`/${cible.entree.ipa}/`}
+      >
         /{cible.entree.ipa}/
       </p>
 
-      <p className="text-ligne leading-snug text-neutre">
+      <p className="relative self-start bg-nuit-carte pr-2 text-ligne leading-snug text-texte">
         dans <strong lang="en">{cible.mot}</strong>
         {exp.ipaProduit ? (
           <>
@@ -91,7 +97,13 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
         )}
       </p>
 
-      <p className="font-mono text-chiffre font-bold" aria-label={`score du phonème : ${cible.score} sur 100`}>
+    </div>
+
+    <div className="flex flex-col gap-5">
+      <p
+        className="border-b-[3px] border-nuit-bord pb-2 text-[64px] font-bold leading-[0.9] tracking-[-0.05em]"
+        aria-label={`score du phonème : ${cible.score} sur 100`}
+      >
         <CompteurAnime valeur={cible.score} depuis={0} dureeMs={700} suffixe=" /100" />
       </p>
 
@@ -115,12 +127,13 @@ function CoeurDiagnostic({ cible, mesure }: { cible: Cible; mesure: Mesure | nul
 
       {!exp.positionnel && <SchemaArticulatoire code={cible.code} />}
 
-      <p className="max-w-prose text-base text-neutre">{cible.entree.conseil}</p>
-      <p className="text-[12.5px] text-neutre" aria-hidden="true">
+      <p className="max-w-prose text-[17px] font-medium text-texte">{cible.entree.conseil}</p>
+      <p className="font-mono text-[12.5px] text-neutre" aria-hidden="true">
         {'★'.repeat(cible.entree.difficulte)}
         {'☆'.repeat(3 - cible.entree.difficulte)} · {enLettres(cible.occurrences)} occurrence
         {cible.occurrences > 1 ? 's' : ''} dans ta phrase
       </p>
+    </div>
     </div>
   );
 }
@@ -144,7 +157,7 @@ export default function DiagnosticVue({
   const cible = d?.cible ?? null;
 
   return (
-    <div className="mx-auto flex min-h-full w-full max-w-2xl flex-col gap-5 px-4 py-6">
+    <div className="mx-auto flex min-h-full w-full max-w-4xl flex-col gap-5 overflow-x-clip px-4 py-6 sm:px-8">
       <Entete onAccueil={onAccueil} />
 
       {erreur && (
@@ -157,14 +170,14 @@ export default function DiagnosticVue({
       )}
 
       {d && (
-        <section className="carte flex flex-col gap-3" aria-label="Ta phrase, mot par mot">
+        <section className="flex flex-col gap-3" aria-label="Ta phrase, mot par mot">
           <PhraseColoree phrase={phrase} scores={d.scores} motCible={cible?.mot} />
           <div className="flex flex-wrap items-center gap-3 text-sm text-neutre">
             <span className="inline-flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-acquis" aria-hidden="true" /> acquis
+              <span className="h-2.5 w-2.5 bg-acquis" aria-hidden="true" /> acquis
             </span>
             <span className="inline-flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-aTravailler" aria-hidden="true" /> à travailler
+              <span className="h-2.5 w-2.5 bg-aTravailler-vif" aria-hidden="true" /> à travailler
             </span>
             {resultat?.simule && (
               <span className="badge-simulation ml-auto" role="status">

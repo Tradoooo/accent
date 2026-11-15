@@ -165,7 +165,7 @@ export default function Perception({ code, langue, onQuitter, onTravailler }: Pr
       </h1>
 
       {!tts && (
-        <p className="rounded-xl border border-aTravailler/40 bg-aTravailler-doux p-3 text-sm text-aTravailler" role="status">
+        <p className="rounded-none border border-aTravailler/40 bg-aTravailler-doux p-3 text-sm text-aTravailler" role="status">
           Ce navigateur ne peut pas lire les mots. Fais l’exercice à deux : une personne lit
           l’un des deux mots, tu choisis A ou B.
         </p>

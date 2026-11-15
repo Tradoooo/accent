@@ -33,7 +33,7 @@ export default function FourchetteScore({ mediane, min, max, lectures, auBordDuS
           bande min–max ambre (verte si la médiane est acquise), trait médiane.
           Les valeurs restent dans l'aria-label. */}
       <div
-        className="relative h-3 w-full rounded-full bg-carte2"
+        className="relative h-[22px] w-full border-2 border-nuit-bord bg-nuit-carte"
         role="img"
         aria-label={`Score ${mediane} sur 100, observé entre ${min} et ${max} sur ${lectures} lecture${lectures > 1 ? 's' : ''}`}
       >
@@ -47,7 +47,7 @@ export default function FourchetteScore({ mediane, min, max, lectures, auBordDuS
           />
         )}
         <span
-          className="absolute -top-[3px] h-[18px] w-1 rounded bg-acquis"
+          className="absolute -top-[6px] h-[30px] w-1 rounded-none bg-texte"
           style={{ left: `calc(${Math.max(0, Math.min(100, mediane))}% - 2px)` }}
           aria-hidden="true"
         />

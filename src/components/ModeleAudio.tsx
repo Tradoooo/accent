@@ -78,7 +78,7 @@ export default function ModeleAudio({
             type="button"
             onClick={() => setVitesse(v)}
             aria-pressed={v === vitesse}
-            className={`min-h-[48px] min-w-[48px] rounded-lg border px-2 text-sm tabular-nums ${
+            className={`min-h-[48px] min-w-[48px] rounded-none border px-2 text-sm tabular-nums ${
               v === vitesse
                 ? 'border-acquis bg-acquis-doux text-acquis'
                 : 'border-nuit-bord text-neutre hover:border-neutre/50'

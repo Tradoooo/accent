@@ -4,35 +4,42 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Fond sombre, contraste AA vérifié (RNF-06). Tokens du verrou design
-        // V1 (G-DESIGN/planches/v1) : nuit/carte/bord, ambre = diagnostic,
-        // vert = acquis, rouge = erreurs système seulement.
+        // Verrou design V7 « Riso » (Design/accent/HANDOFF.md [Claude] VERROU V7) :
+        // papier + encre, deux encres produit. Les noms de tokens sont gardés
+        // (nuit/carte/bord…) pour que tous les écrans basculent d'un coup ; leurs
+        // valeurs sont maintenant claires. Contraste AA vérifié sur papier.
         nuit: {
-          DEFAULT: '#0b0f14',
-          carte: '#141b23',
-          bord: '#22303c',
-          bord2: '#2c3d4b',
+          DEFAULT: '#f4efe4', // papier (fond)
+          carte: '#fbf8f1', // papier clair (cadres, champs)
+          bord: '#1d2a24', // encre (filets, contours)
+          bord2: '#55615a', // encre 2
         },
-        carte2: '#1b242d',
-        // Jamais de rouge pour un son à travailler (ACCENT.md §21) : le rouge
-        // est réservé aux erreurs système.
+        carte2: '#ebe4d4',
+        // Son à travailler : ambre. DEFAULT = ambre « texte » (AA sur papier) ;
+        // `vif` = l'encre ambre pour les aplats, trames et grands glyphes.
+        // Jamais de rouge pour un son à travailler (ACCENT.md §21).
         aTravailler: {
-          DEFAULT: '#f2a33c',
-          doux: '#3a2a12',
+          DEFAULT: '#8a5200',
+          doux: '#fbe3bd',
+          vif: '#f2a33c',
         },
+        // Acquis : DEFAULT = vert « texte » (AA) ; `vif` = l'encre verte (aplat
+        // du bouton d'action).
         acquis: {
-          DEFAULT: '#4ec98a',
-          doux: '#12301f',
+          DEFAULT: '#1f7a4c',
+          doux: '#d7efe0',
+          vif: '#3fbf7f',
         },
         neutre: {
-          DEFAULT: '#8fa3b3',
-          doux: '#1b242d',
+          DEFAULT: '#55615a',
+          doux: '#ebe4d4',
         },
+        // Rouge réservé aux erreurs système.
         erreur: {
-          DEFAULT: '#e5484d',
-          doux: '#351416',
+          DEFAULT: '#b42318',
+          doux: '#fde4e1',
         },
-        texte: '#e8eef4',
+        texte: '#1d2a24',
       },
       fontSize: {
         // Texte courant ≥ 16 px (RNF-06).
@@ -50,7 +57,7 @@ export default {
         tactile: '48px',
       },
       fontFamily: {
-        sans: ['system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['"Space Grotesk"', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
     },

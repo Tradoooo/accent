@@ -66,7 +66,7 @@ export default function ProfilVue({
         </p>
 
         {recurrents.length > 0 && (
-          <section className="rounded-xl border border-aTravailler/40 bg-aTravailler-doux p-4">
+          <section className="rounded-none border border-aTravailler/40 bg-aTravailler-doux p-4">
             <h2 className="text-lg font-semibold text-aTravailler">Ce qui revient</h2>
             <p className="mt-1 text-sm text-neutre">
               Ces sons sont ressortis sur plusieurs phrases différentes : c’est par là
@@ -95,7 +95,7 @@ export default function ProfilVue({
             const e = PHONEMES[code];
             const s = profil.parPhoneme[code];
             return (
-              <li key={code} className={`rounded-xl border px-4 py-3 ${classe(code, profil)}`}>
+              <li key={code} className={`rounded-none border px-4 py-3 ${classe(code, profil)}`}>
                 <div className="flex items-baseline justify-between gap-2">
                   <span className="font-mono text-xl">/{e.ipa}/</span>
                   {s && s.tentatives > 0 ? (
@@ -117,7 +117,7 @@ export default function ProfilVue({
                     {onPerception && jouable(code) && (
                       <button
                         type="button"
-                        className="min-h-[48px] rounded-lg px-2 text-sm underline underline-offset-2"
+                        className="min-h-[48px] rounded-none px-2 text-sm underline underline-offset-2"
                         onClick={() => onPerception(code)}
                         aria-label={`Discriminer le son ${e.ipa} à l'oreille`}
                       >
@@ -127,7 +127,7 @@ export default function ProfilVue({
                     {onTravailler && (
                       <button
                         type="button"
-                        className="min-h-[48px] rounded-lg px-2 text-sm underline underline-offset-2"
+                        className="min-h-[48px] rounded-none px-2 text-sm underline underline-offset-2"
                         onClick={() => onTravailler(code)}
                         aria-label={`Travailler le son ${e.ipa} à la voix`}
                       >

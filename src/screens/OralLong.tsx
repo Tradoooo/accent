@@ -154,7 +154,7 @@ export default function OralLong(props: Props) {
           Il est découpé en phrases, et tu les travailles une par une.
         </p>
         <textarea
-          className="min-h-48 w-full resize-y rounded-xl border border-nuit-bord bg-nuit p-4 text-lg
+          className="min-h-48 w-full resize-y rounded-none border border-nuit-bord bg-nuit p-4 text-lg
             focus:border-acquis focus:outline-none"
           value={texte}
           lang={langue}
@@ -423,14 +423,14 @@ function Bilan({
       </p>
       <ul className="flex flex-col gap-2">
         {bilan.phrases.map((r) => (
-          <li key={r.index} className="rounded-xl border border-nuit-bord px-3 py-2">
+          <li key={r.index} className="rounded-none border border-nuit-bord px-3 py-2">
             <p className="text-base" lang={langue}>{r.texte}</p>
             <p className="text-sm text-neutre">{libelleBilan(r)}</p>
           </li>
         ))}
       </ul>
       {bilan.sonsRecurrents.length > 0 && (
-        <div className="rounded-xl border border-aTravailler/40 bg-aTravailler-doux p-4">
+        <div className="rounded-none border border-aTravailler/40 bg-aTravailler-doux p-4">
           <h2 className="text-lg font-semibold text-aTravailler">Ce qui revient</h2>
           <ul className="mt-2 flex flex-wrap gap-2">
             {bilan.sonsRecurrents.map(({ code, fois }) => (

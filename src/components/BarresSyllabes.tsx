@@ -25,7 +25,7 @@ export default function BarresSyllabes({ mots }: Props) {
                 return (
                   <span
                     key={syl + i}
-                    className={`flex w-16 items-end justify-center rounded-t-lg pb-1 text-sm font-semibold transition-all ${
+                    className={`flex w-16 items-end justify-center rounded-none pb-1 text-sm font-semibold transition-all ${
                       fort
                         ? 'h-16 bg-aTravailler text-nuit'
                         : 'h-9 bg-neutre-doux text-neutre'

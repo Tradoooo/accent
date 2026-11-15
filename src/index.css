@@ -4,29 +4,25 @@
 
 /* Design (ACCENT.md §21) : un seul chiffre à l'écran, pas de rouge pour un son
    à travailler, cibles tactiles ≥ 48 px, texte ≥ 16 px, contraste AA.
-   Verrou design V1 (Design/accent/HANDOFF.md [Claude] 2026-11-15) : tokens
-   nuit/carte/bord, ambre = son à travailler, vert = acquis/action principale,
-   rouge réservé aux erreurs système. */
+   Verrou design V7 « Riso » (Design/accent/HANDOFF.md [Claude] VERROU V7) :
+   papier + encre, deux encres produit (ambre = son à travailler, vert =
+   acquis / action), grain, double encre décalée, trames de points, tampons,
+   angles droits. Rouge réservé aux erreurs système. */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  --nuit: #0b0f14;
-  --carte: #141b23;
-  --carte-2: #1b242d;
-  --bord: #22303c;
-  --bord-2: #2c3d4b;
-  --texte: #e8eef4;
-  --neutre: #8fa3b3;
-  --amb: #f2a33c;
-  --amb-doux: #3a2a12;
-  --amb-ligne: #f2a33c55;
-  --vert: #4ec98a;
-  --vert-doux: #12301f;
-  --vert-ligne: #4ec98a44;
-  --erreur: #e5484d;
-  --r-carte: 22px;
-  --r-ctrl: 14px;
+  --papier: #f4efe4;
+  --papier-clair: #fbf8f1;
+  --papier-2: #ebe4d4;
+  --encre: #1d2a24;
+  --encre-2: #55615a;
+  --amb: #f2a33c; /* encre ambre : aplats, trames, grands glyphes */
+  --amb-txt: #8a5200; /* ambre en texte courant (AA) */
+  --vert: #3fbf7f; /* encre verte : aplat d'action */
+  --vert-txt: #1f7a4c; /* vert en texte courant (AA) */
+  --erreur: #b42318;
+  --decalage: 0.035em;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   --spring: cubic-bezier(0.34, 1.5, 0.5, 1);
 }
@@ -44,17 +40,78 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 
-/* Fond d'accueil (socle A « Veille ») : halo radial ambre en haut à gauche,
-   vert à droite, grille 36 px masquée vers le haut. */
+/* Grain papier (Riso) : bruit SVG en multiplication, au-dessus de tout mais
+   transparent aux clics. */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.3;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .25 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Fond d'accueil (Riso) : une trame de points ambre coupée par le bord. */
 .fond-halos {
-  background-image:
-    radial-gradient(720px 380px at -8% -10%, rgba(242, 163, 60, 0.16), transparent 65%),
-    radial-gradient(640px 360px at 108% 32%, rgba(78, 201, 138, 0.12), transparent 65%),
-    linear-gradient(rgba(44, 61, 75, 0.16) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(44, 61, 75, 0.16) 1px, transparent 1px);
-  background-size: auto, auto, 36px 36px, 36px 36px;
-  background-repeat: no-repeat, no-repeat, repeat, repeat;
-  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 42%, rgba(0, 0, 0, 0.55) 72%, rgba(0, 0, 0, 0.25) 100%);
+  position: relative;
+  isolation: isolate;
+}
+
+.fond-halos::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  right: -110px;
+  top: -130px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--amb) 34%, transparent 37%) 0 0 / 13px 13px;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Trame de points (décor) : ambre par défaut, `.trame-vert` en vert. */
+.trame {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--amb) 34%, transparent 37%) 0 0 / 13px 13px;
+  mix-blend-mode: multiply;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.trame-vert {
+  background-image: radial-gradient(circle, var(--vert) 34%, transparent 37%);
+}
+
+/* Double encre : le texte est imprimé une 2e fois en ambre, décalé, en
+   multiplication (data-texte = même texte). Le repérage « respire ». */
+.double-encre {
+  position: relative;
+  display: inline-block;
+}
+
+.double-encre::after,
+.phoneme-heros::after {
+  content: attr(data-texte);
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--amb);
+  mix-blend-mode: multiply;
+  transform: translate(var(--decalage), var(--decalage));
+  animation: reperage 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes reperage {
+  50% {
+    transform: translate(0.02em, 0.05em);
+  }
 }
 
 /* Souligné SVG du titre : dessiné à l'entrée (dashoffset), état final = tracé
@@ -81,79 +138,120 @@ body {
 
 @layer components {
   .carte {
-    @apply rounded-[22px] border border-nuit-bord bg-nuit-carte p-[18px];
+    @apply relative border-[3px] border-nuit-bord bg-nuit-carte p-[18px];
   }
 
   .encart {
-    @apply rounded-2xl border border-nuit-bord bg-nuit p-4;
+    @apply border-2 border-nuit-bord bg-nuit p-4;
   }
 
   .bouton {
     @apply inline-flex min-h-[48px] min-w-[48px] items-center justify-center gap-2
-      px-5 py-3 text-base font-medium transition-[background-color,border-color,color,transform]
-      duration-150 [transition-timing-function:var(--spring)] active:scale-[0.97] focus-visible:outline
-      focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-acquis
-      rounded-[14px];
+      border-[3px] border-nuit-bord px-5 py-3 text-base font-bold
+      transition-[background-color,box-shadow,transform] duration-150
+      focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-4
+      focus-visible:outline-texte;
   }
 
+  /* Action : aplat vert, contour encre, ombre ambre décalée (mauvais repérage). */
   .bouton-primaire {
-    @apply bouton bg-acquis font-bold text-[#04140b] hover:bg-acquis/90;
+    @apply bouton bg-acquis-vif text-[#0f2a1c];
+    box-shadow: 5px 5px 0 var(--amb);
+  }
+
+  .bouton-primaire:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 7px 0 var(--amb);
+  }
+
+  .bouton-primaire:active:not(:disabled) {
+    transform: translate(3px, 3px);
+    box-shadow: 2px 2px 0 var(--amb);
+  }
+
+  .bouton-primaire:disabled {
+    @apply opacity-50;
   }
 
   .bouton-secondaire {
-    @apply bouton border border-nuit-bord bg-carte2 text-texte hover:border-neutre/60;
+    @apply bouton bg-nuit-carte text-texte hover:bg-carte2;
+    box-shadow: 4px 4px 0 var(--encre);
+  }
+
+  .bouton-secondaire:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--encre);
   }
 
   .bouton-fantome {
-    @apply bouton border border-nuit-bord bg-transparent text-neutre hover:border-neutre/50 hover:text-texte;
+    @apply bouton bg-transparent text-texte hover:bg-carte2;
   }
 
-  /* Étiquette : 11.5 px capitales, espacement large, jamais un chiffre. */
+  /* Étiquette : mono, capitales, jamais un chiffre. */
   .etiquette {
-    @apply inline-flex items-center rounded-full border border-nuit-bord px-3 py-1 text-neutre;
+    @apply inline-flex items-center font-mono text-neutre;
     font-size: 11.5px;
     line-height: 16px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
+  /* Le phonème : grand glyphe en encre + double encre ambre (data-texte). */
   .phoneme-heros {
-    @apply font-mono font-bold text-phoneme tracking-tight text-aTravailler;
+    @apply relative inline-block font-bold text-phoneme tracking-tight text-texte;
     animation: heros-entre 0.7s var(--spring) backwards;
   }
 
-  /* Badge « Simulation » : pilule discrète, rond creux, jamais une note. */
+  /* Tampon « Simulation » : incliné, capitales, jamais une note. */
   .badge-simulation {
-    @apply inline-flex items-center gap-2 rounded-full border border-nuit-bord2 px-3 py-1 text-neutre;
+    @apply inline-flex items-center gap-2 border-[2.5px] border-current px-2.5 py-0.5 font-bold text-neutre;
     font-size: 12px;
     line-height: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
   }
 
   .badge-simulation::before {
     content: '';
-    @apply h-2.5 w-2.5 rounded-full border-2 border-neutre;
+    @apply h-2 w-2 shrink-0 rounded-full border-2 border-current;
   }
 
-  /* Phrase mot par mot : pastilles (verrou V1). */
+  /* Tampon « acquis » (vert). */
+  .tampon-acquis {
+    @apply inline-flex items-center gap-1 border-[2.5px] border-acquis px-2.5 py-0.5 font-bold text-acquis;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transform: rotate(-3deg);
+  }
+
+  /* Phrase mot par mot : acquis en vert foncé, à travailler souligné ambre. */
   .mot-ok {
-    @apply rounded-lg bg-acquis-doux px-1.5 py-0.5 text-acquis;
+    @apply px-0.5 text-acquis;
   }
 
   .mot-a-travailler {
-    @apply rounded-lg bg-aTravailler-doux px-1.5 py-0.5 font-semibold text-aTravailler;
-    box-shadow: inset 0 -2px 0 var(--amb);
+    @apply px-0.5 font-bold text-texte;
+    text-decoration: underline;
+    text-decoration-color: var(--amb);
+    text-decoration-thickness: 0.12em;
+    text-underline-offset: 0.16em;
   }
 
-  /* Paire minimale : deux cellules pleine largeur, cible bordée d'ambre. */
+  /* Paire minimale : deux cases cadrées, la cible en aplat ambre. */
   .paire-cell {
-    @apply relative flex min-h-[52px] flex-1 flex-col items-center justify-center gap-1
-      rounded-[14px] border border-nuit-bord bg-nuit px-4 py-2;
-    font-size: 17px;
+    @apply relative flex min-h-[56px] flex-1 flex-col items-center justify-center gap-1
+      border-[3px] border-nuit-bord bg-nuit-carte px-4 py-2 font-bold;
+    font-size: 19px;
     line-height: 24px;
+    box-shadow: 4px 4px 0 var(--encre);
   }
 
   .paire-cell-cible {
-    @apply border-aTravailler/50 text-aTravailler;
+    @apply text-texte;
+    background: var(--amb);
   }
 
   /* Triangle ▶ devant le mot cible de la paire. */
@@ -163,7 +261,7 @@ body {
     left: 10px;
     top: 10px;
     font-size: 10px;
-    color: var(--amb);
+    color: var(--encre);
   }
 
   .ligne-erreur {
@@ -177,15 +275,16 @@ body {
 
 /* Fourchette : bande min–max ambre (vert si médiane ≥ seuil acquis). */
 .fourchette-bande {
-  border-radius: 9999px;
+  border-radius: 0;
 }
 
+/* Fourchette : la bande min–max est une trame de points (Riso). */
 .fourchette-bande-amb {
-  background-color: rgba(242, 163, 60, 0.5);
+  background: radial-gradient(circle, var(--amb) 40%, transparent 43%) 0 0 / 7px 7px;
 }
 
 .fourchette-bande-vert {
-  background-color: rgba(78, 201, 138, 0.5);
+  background: radial-gradient(circle, var(--vert) 40%, transparent 43%) 0 0 / 7px 7px;
 }
 
 /* Accessibilité : mouvement réduit respecté (RNF-06). Les animations sont

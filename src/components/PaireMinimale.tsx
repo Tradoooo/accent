@@ -35,7 +35,7 @@ function Mot({ mot, indice, tone }: { mot: string; indice?: string; tone: 'cible
       <span lang="en" className="font-semibold">
         {segments(mot, indice).map((s, i) =>
           s.fort ? (
-            <mark key={i} className="rounded bg-transparent underline decoration-2 underline-offset-4">
+            <mark key={i} className="rounded-none bg-transparent underline decoration-2 underline-offset-4">
               {s.t}
             </mark>
           ) : (
