@@ -26,13 +26,17 @@ C'est **le produit lui-même**, pas une aide au développement.
   `GradingSystem: 'HundredMark'`, `EnableMiscue: true`) ; `traduireAzure()` convertit la
   réponse en `ScorePhoneme[]` (score = `AccuracyScore` par phonème).
 - **Chemin par défaut prévu** : via un proxy edge qui détient la clé (contrat codé dans
-  `src/providers/proxy.ts`, `POST /api/analyse`). Le worker proxy lui-même n'est pas
-  encore commité à la date de cette déclaration.
+  `src/providers/proxy.ts`, `POST /api/analyse`). Deux implémentations du proxy sont
+  commitées : Worker Cloudflare (`worker/index.ts`) et serveur Node sans dépendance
+  (`server/serve.mjs`, logique partagée `server/lib.mjs`). Aucune clé n'est committée :
+  la clé Azure vit côté serveur (proxy) ou dans le navigateur de l'utilisateur (BYOK),
+  jamais dans le bundle.
 - **Mode démonstration local** : `src/providers/demo.ts` est une **simulation**
   déterministe (descripteurs acoustiques projetés sur la taxonomie). Elle renvoie
-  `simule: true` et l'écran Diagnostic affiche « Mode démonstration : mesure simulée
-  localement, pas une évaluation réelle » (`src/screens/Diagnostic.tsx`). Aucune mesure
-  simulée n'est jamais présentée comme une mesure réelle.
+  `simule: true`, et l'écran affiche un badge « Simulation — mode démonstration :
+  mesure simulée, pas une évaluation réelle » (`src/screens/Diagnostic.tsx`), ainsi
+  qu'un badge « Simulation locale · pas de clé de mesure » sur l'Accueil. Aucune
+  mesure simulée n'est jamais présentée comme une mesure réelle.
 
 ## (b) Le LLM utilisé pour les phrases d'entraînement — ET LEUR CACHE STATIQUE COMMITÉ
 
