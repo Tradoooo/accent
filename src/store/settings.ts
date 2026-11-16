@@ -31,8 +31,16 @@ export interface Reglages {
 
 const CLE = 'accent.reglages.v1';
 
+/**
+ * URL du proxy par défaut, fournie au build (`VITE_PROXY_URL`). Vide = le
+ * navigateur ne connaît aucun proxy et l'app tourne sur son moteur local,
+ * signalé « simulation » (RNF-09). La clé reste côté serveur : le bundle
+ * ne contient qu'une URL publique.
+ */
+const PROXY_BUILD = (import.meta.env as { VITE_PROXY_URL?: string }).VITE_PROXY_URL ?? '';
+
 export const REGLAGES_DEFAUT: Reglages = {
-  urlProxy: '',
+  urlProxy: PROXY_BUILD,
   cleAzure: '',
   regionAzure: 'westeurope',
   langueCible: 'en',

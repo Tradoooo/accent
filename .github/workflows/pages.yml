@@ -51,6 +51,12 @@ jobs:
         run: npm ci --no-audit --no-fund --prefer-offline
 
       - name: Build + gardes
+        env:
+          # Proxy de mesure par défaut (serveur de démo r630 derrière un tunnel
+          # HTTPS). Le bundle ne contient qu'une URL publique : la clé Azure
+          # reste côté serveur (~/.config/accent.env). Si le tunnel tombe, le
+          # navigateur bascule sur son moteur local, signalé « simulation ».
+          VITE_PROXY_URL: https://williams-serum-readers-respectively.trycloudflare.com
         run: |
           npm run build
           node tools/check-bundle-size.mjs
