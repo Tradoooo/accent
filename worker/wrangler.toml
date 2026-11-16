@@ -1,6 +1,8 @@
 name = "accent-proxy"
 main = "index.ts"
 compatibility_date = "2026-01-01"
+# Compte Cloudflare de Baptiste (soumission solo B) — ne pas déployer ailleurs.
+account_id = "4f34c137a92ac8bf3610b1254afd64c9"
 
 # Déploiement : npx wrangler deploy (depuis ce dossier).
 # Secrets (jamais dans le dépôt) :
@@ -13,9 +15,11 @@ AZURE_SPEECH_REGION = "westeurope"
 AZURE_LANGUE = "en-US"
 QUOTA_PAR_IP_JOUR = "200"
 # Origines autorisées pour CORS, séparées par des virgules.
-# '*' = démo publique autorisée depuis n'importe quelle origine (à restreindre
-# dès qu'une URL de production existe).
-ORIGINES_AUTORISEES = "*"
+# La démo publique est servie par GitHub Pages : l'origine est
+# 'https://tradoooo.github.io' (le chemin /accent/ ne fait pas partie de
+# l'origine). '*' reste possible pour un test local, mais la production
+# n'autorise que cette origine.
+ORIGINES_AUTORISEES = "https://tradoooo.github.io"
 
 # Le worker ne sert QUE l'API. Le front statique est déployé à part
 # (Cloudflare Pages ou le serveur de démo r630).

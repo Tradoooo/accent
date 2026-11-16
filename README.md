@@ -58,11 +58,14 @@ Machine à états : `src/App.tsx` (8 vues, aucune route, aucun compte).
 ```
 
 - Contrat client du proxy : `src/providers/proxy.ts` (`POST /api/analyse`,
-  `GET /api/phrases`). **Le worker lui-même n'est pas encore commité** — voir
-  « État d'avancement » ci-dessous.
+  `GET /api/phrases`). Le worker edge est commité (`worker/`) et se déploie sur
+  Cloudflare Workers (`worker/README.md`).
 - Choix du fournisseur et repli : `src/providers/index.ts`
   (`fournisseurSelonReglages` : BYOK Azure → proxy → démo locale ;
   `repliSurDemo` sur erreur proxy, branché dans `src/App.tsx`).
+- URL du proxy par défaut : `VITE_PROXY_URL` injectée au build, sinon
+  `https://accent-proxy.duello.workers.dev` (worker déployé, clé en secret
+  serveur — voir `src/store/settings.ts`).
 
 ## Ce que le produit refuse de faire
 
@@ -105,18 +108,26 @@ npm run build      # tsc --noEmit + vite build
 npm run size       # garde RNF-07 : bundle < 300 Ko gzip (actuellement ~83 Ko)
 ```
 
-Sans clé API ni proxy configuré, l'app démarre sur le **moteur de démonstration local**
-(`src/providers/demo.ts`) : elle est entièrement cliquable, et chaque mesure simulée est
-signalée « simulation » à l'écran — jamais de bluff. Le badge est visible sur **l'Accueil**
+En dev (hors build de production), sans proxy configuré, l'app démarre sur le
+**moteur de démonstration local** (`src/providers/demo.ts`) : elle est entièrement
+cliquable, et chaque mesure simulée est signalée « simulation » à l'écran — jamais
+de bluff. Le badge est visible sur **l'Accueil**
 (« Simulation locale · pas de clé de mesure ») **et sur le Diagnostic**
 (« Simulation — mode démonstration : mesure simulée, pas une évaluation réelle »).
+Le build de production, lui, pointe par défaut sur le worker edge (voir
+« Démo publique »).
 
 ## Démo publique
 
 **https://tradoooo.github.io/accent/** — GitHub Pages, HTTPS, accessible à tous,
-sans compte. Le micro y fonctionne (contexte sécurisé). Sans proxy sur Pages,
-l'app tourne sur son **moteur local de démonstration**, signalé « simulation » à
-l'écran ; le mode BYOK (Réglages) permet de brancher une vraie clé Azure Speech.
+sans compte. Le micro y fonctionne (contexte sécurisé). La mesure publique passe
+par le **proxy edge Cloudflare** : la clé Azure Speech reste dans le secret du
+worker, **jamais dans le navigateur**, et le quota est borné par IP et par jour.
+Si le quota est dépassé ou si le proxy est injoignable, l'app **replie sur son
+moteur local de démonstration**, et l'écran affiche le badge « simulation » — le
+chiffre affiché n'est alors pas une évaluation réelle. Le mode BYOK reste
+disponible dans **Réglages** : la clé personnelle part alors directement chez
+Microsoft, jamais chez notre proxy.
 
 ## Déployer
 
@@ -190,8 +201,10 @@ ou sous un sous-chemin (`/accent/` sur Pages). Le micro exige **HTTPS** (ou loca
 
 **Prévu / non implémenté** :
 
-- **Mesure réelle** : il faut une clé Azure Speech (tier gratuit F0, 5 h audio/mois).
-  Sans clé, l'app tourne sur le moteur local et **le dit à l'écran**.
+- **Clé Azure du proxy** : le worker a besoin d'une clé Azure Speech (tier gratuit
+  F0, 5 h audio/mois) posée comme secret (`wrangler secret put AZURE_SPEECH_KEY`).
+  Sans clé, le proxy répond « sans clé » et l'app tourne sur le moteur local en
+  le disant à l'écran.
 - **Validation go/no-go** sur corpus audio réel (10 mots × 3 lectures, Annexe A) :
   à enregistrer par un francophone.
 - **Vidéo ≤ 3 min** : script plan par plan dans `docs/VIDEO-SCRIPT.md`, tournage à faire.

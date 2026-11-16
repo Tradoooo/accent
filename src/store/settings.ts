@@ -32,15 +32,21 @@ export interface Reglages {
 const CLE = 'accent.reglages.v1';
 
 /**
- * URL du proxy par défaut, fournie au build (`VITE_PROXY_URL`). Vide = le
- * navigateur ne connaît aucun proxy et l'app tourne sur son moteur local,
- * signalé « simulation » (RNF-09). La clé reste côté serveur : le bundle
- * ne contient qu'une URL publique.
+ * URL du proxy de mesure par défaut. Deux sources, dans l'ordre :
+ *   1. `VITE_PROXY_URL`, injectée au build (CI Pages) ;
+ *   2. le worker accent-proxy déployé (compte du porteur du projet).
+ * En dev et en test, aucune URL par défaut : le moteur local sert de témoin.
+ * La clé Azure reste côté serveur : le bundle ne contient qu'une URL publique.
  */
-const PROXY_BUILD = (import.meta.env as { VITE_PROXY_URL?: string }).VITE_PROXY_URL ?? '';
+export const URL_PROXY_DEFAUT = 'https://accent-proxy.duello.workers.dev';
+
+export function resoudreUrlProxy(valeurEnv: string | undefined, production: boolean): string {
+  if (valeurEnv) return valeurEnv;
+  return production ? URL_PROXY_DEFAUT : '';
+}
 
 export const REGLAGES_DEFAUT: Reglages = {
-  urlProxy: PROXY_BUILD,
+  urlProxy: resoudreUrlProxy(import.meta.env.VITE_PROXY_URL, import.meta.env.PROD),
   cleAzure: '',
   regionAzure: 'westeurope',
   langueCible: 'en',
