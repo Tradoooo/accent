@@ -25,12 +25,21 @@ C'est **le produit lui-même**, pas une aide au développement.
   l'en-tête `Pronunciation-Assessment` (`Granularity: 'Phoneme'`,
   `GradingSystem: 'HundredMark'`, `EnableMiscue: true`) ; `traduireAzure()` convertit la
   réponse en `ScorePhoneme[]` (score = `AccuracyScore` par phonème).
-- **Chemin par défaut prévu** : via un proxy edge qui détient la clé (contrat codé dans
-  `src/providers/proxy.ts`, `POST /api/analyse`). Deux implémentations du proxy sont
-  commitées : Worker Cloudflare (`worker/index.ts`) et serveur Node sans dépendance
-  (`server/serve.mjs`, logique partagée `server/lib.mjs`). Aucune clé n'est committée :
-  la clé Azure vit côté serveur (proxy) ou dans le navigateur de l'utilisateur (BYOK),
-  jamais dans le bundle.
+- **Chemin par défaut de la mesure publique** : le proxy edge détient la clé
+  (contrat codé dans `src/providers/proxy.ts`, `POST /api/analyse`). Deux
+  implémentations du proxy sont commitées : Worker Cloudflare (`worker/index.ts`)
+  et serveur Node sans dépendance (`server/serve.mjs`, logique partagée
+  `server/lib.mjs`). Aucune clé n'est committée : la clé Azure vit dans le secret
+  du worker (jamais dans le bundle ni dans le navigateur) ou, en mode BYOK, dans
+  le navigateur de l'utilisateur. L'URL du worker est le défaut de `urlProxy`
+  (`src/store/settings.ts`) : variable de build `VITE_PROXY_URL`, sinon l'URL du
+  worker déployé (`https://accent-proxy.duello.workers.dev`, compte Cloudflare
+  du porteur du projet ; la clé y vit en secret serveur).
+- **Quota et repli** : le worker borne les analyses par IP et par jour (200 par
+  défaut, `QUOTA_PAR_IP_JOUR` dans `worker/wrangler.toml`). Si le quota est
+  dépassé ou si le proxy est injoignable, le navigateur bascule sur le moteur
+  local de démonstration : la mesure affichée est alors signalée « simulation »,
+  jamais comme une évaluation réelle. Le mode BYOK reste proposé dans Réglages.
 - **Mode démonstration local** : `src/providers/demo.ts` est une **simulation**
   déterministe (descripteurs acoustiques projetés sur la taxonomie). Elle renvoie
   `simule: true`, et l'écran affiche un badge « Simulation — mode démonstration :

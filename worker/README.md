@@ -48,11 +48,12 @@ cd worker
 npm i -g wrangler            # ou npx wrangler
 wrangler login
 wrangler secret put AZURE_SPEECH_KEY
-wrangler deploy              # → https://accent-proxy.<compte>.workers.dev
+wrangler deploy              # → https://accent-proxy.duello.workers.dev
 ```
 
-Puis dans l'app (écran Réglages) ou via `VITE_PROXY_URL` au build :
-`urlProxy = https://accent-proxy.<compte>.workers.dev`.
+Puis dans l'app (écran Réglages) ou au build du front via `VITE_PROXY_URL`
+(sinon le placeholder `URL_PROXY_DEFAUT` dans `src/store/settings.ts`) :
+`urlProxy = https://accent-proxy.duello.workers.dev`.
 
 Variables dans `wrangler.toml` : région Azure, langue, quota par IP et par jour,
 origines CORS autorisées (mettre l'URL du front en production, pas `*`).
